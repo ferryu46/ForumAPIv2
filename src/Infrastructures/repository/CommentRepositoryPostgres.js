@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const Comment = require('../../Domains/comments/entities/Comment');
@@ -14,8 +15,8 @@ class CommentRepositoryPostgres extends CommentRepository {
     const id = `comment-${this._idGenerator()}`;
 
     const query = {
-      text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, owner',
-      values: [id, content, owner, threadId, false, new Date().toISOString()],
+      text: 'INSERT INTO comments (id, content, owner, thread_id, is_delete, date, parent_comment_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, owner',
+      values: [id, content, owner, threadId, false, new Date().toISOString(), newComment.parentCommentId || null],
     };
 
     const result = await this._pool.query(query);
@@ -24,14 +25,6 @@ class CommentRepositoryPostgres extends CommentRepository {
   }
 
   async isCommentExist(commentId) {
-    /**
-     * @TODO 8
-     * Lengkapi kode pada method `isCommentExist` yang berguna untuk
-     * melihat apakah komentar berdasarkan `commentId` sudah ada di database atau belum.
-     *
-     * Method ini harus mengembalikan `true` jika komentar sudah tersedia dan
-     * mengembalikan `false` jika komentar belum tersedia.
-     */
     const query = {
       text: 'SELECT COUNT(*) FROM comments WHERE id = $1',
       values: [commentId],
@@ -53,6 +46,35 @@ class CommentRepositoryPostgres extends CommentRepository {
     return result.rows[0].owner === owner;
   }
 
+  async likeComment(commentId, userId) {
+    const query = {
+      text: 'INSERT INTO comment_likes VALUES($1, $2)',
+      values: [commentId, userId],
+    };
+
+    await this._pool.query(query);
+  }
+
+  async unlikeComment(commentId, userId) {
+    const query = {
+      text: 'DELETE FROM comment_likes WHERE comment_id = $1 AND user_id = $2',
+      values: [commentId, userId],
+    };
+
+    await this._pool.query(query);
+  }
+
+  async isCommentLikedByUser(commentId, userId) {
+    const query = {
+      text: 'SELECT COUNT(*) FROM comment_likes WHERE comment_id = $1 AND user_id = $2',
+      values: [commentId, userId],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rows[0].count > 0;
+  }
+
   async deleteComment(commentId) {
     const query = {
       text: 'UPDATE comments SET is_delete = true WHERE id = $1',
@@ -69,10 +91,14 @@ class CommentRepositoryPostgres extends CommentRepository {
                 comments.content,
                 comments.date,
                 comments.is_delete,
-                users.username
+                users.username,
+                c.*,
+              COUNT(cl.user_id) AS like_count
               FROM comments 
               INNER JOIN users ON comments.owner = users.id 
-              WHERE comments.thread_id = $1
+              LEFT JOIN comment_likes cl ON c.id = cl.comment_id
+              WHERE c.thread_id = $1
+              GROUP BY c.id
               ORDER BY comments.date`,
       values: [threadId],
     };
@@ -81,6 +107,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     return result.rows.map((row) => new Comment({
       ...row,
+      likeCount: parseInt(row.like_count, 10),
       isDelete: row.is_delete,
     }));
   }

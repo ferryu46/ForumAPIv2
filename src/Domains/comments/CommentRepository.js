@@ -11,13 +11,18 @@ class CommentRepository {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  /**
-   * @TODO 6
-   * Buatlah dua async method bernama `deleteComment` dan `getCommentsByThreadId`
-   *
-   * Pastikan method tersebut dibuat abstract dengan langsung
-   * membangkitkan error dengan pesan "COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED"
-   */
+  async likeComment(commentId, userId) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+
+  async unlikeComment(commentId, userId) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+
+  async isCommentLikedByUser(commentId, userId) {
+    throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+
   async deleteComment(commentId) {
     throw new Error('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
