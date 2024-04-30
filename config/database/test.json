@@ -1,0 +1,7 @@
+{
+  "user": "darknight",
+  "password": "oiunited",
+  "host": "localhost",
+  "port": 5432,
+  "database": "forumapi1_test"
+}
