@@ -1,50 +1,43 @@
 const AddedThread = require('../AddedThread');
 
-describe('AddedThread entities', () => {
+describe('an AddedThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
       id: 'thread-123',
+      title: 'sebuah body',
     };
 
     // Action and Assert
-    expect(() => new AddedThread(payload))
-      .toThrowError('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddedThread(payload)).toThrowError('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
     // Arrange
     const payload = {
-      id: 123,
-      title: true,
-      owner: {},
+      id: 'thread-123',
+      title: [],
+      owner: 112,
     };
 
     // Action and Assert
-    expect(() => new AddedThread(payload))
-      .toThrowError('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new AddedThread(payload)).toThrowError('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addedThread object correctly', () => {
-    /**
-     * @TODO 2
-     * Lengkapi pengujian pada skenario berhasil membuat objek addedThread.
-     * Pastikan terdapat proses `assertion`
-     * yang mengecek nilai-nilai properti yang berada di dalam objek `addedThread`.
-     */
     // Arrange
     const payload = {
       id: 'thread-123',
-      title: 'Thread Title',
-      owner: 'user-456',
+      title: 'sebuah thread',
+      owner: 'user-123',
     };
+
     // Action
     const addedThread = new AddedThread(payload);
+
     // Assert
-    expect(addedThread).toEqual(expect.objectContaining({
-      id: payload.id,
-      title: payload.title,
-      owner: payload.owner,
-    }));
+    expect(addedThread.id).toEqual(payload.id);
+    expect(addedThread.title).toEqual(payload.title);
+    expect(addedThread.owner).toEqual(payload.owner);
   });
 });

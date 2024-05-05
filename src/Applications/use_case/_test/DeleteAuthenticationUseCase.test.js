@@ -41,7 +41,7 @@ describe('DeleteAuthenticationUseCase', () => {
       authenticationRepository: mockAuthenticationRepository,
     });
 
-    // Action
+    // Act
     await deleteAuthenticationUseCase.execute(useCasePayload);
 
     // Assert

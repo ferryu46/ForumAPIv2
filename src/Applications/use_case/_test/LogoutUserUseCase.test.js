@@ -26,7 +26,7 @@ describe('LogoutUserUseCase', () => {
       .toThrowError('DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it('should orchestrating the logout user action correctly', async () => {
+  it('should orchestrating the delete authentication action correctly', async () => {
     // Arrange
     const useCasePayload = {
       refreshToken: 'refreshToken',
@@ -41,7 +41,7 @@ describe('LogoutUserUseCase', () => {
       authenticationRepository: mockAuthenticationRepository,
     });
 
-    // Action
+    // Act
     await logoutUserUseCase.execute(useCasePayload);
 
     // Assert

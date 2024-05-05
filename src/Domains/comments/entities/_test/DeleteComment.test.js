@@ -1,10 +1,10 @@
 const DeleteComment = require('../DeleteComment');
 
-describe('DeleteComment entities', () => {
+describe('a DeleteComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
-      id: 'comment-123',
+
     };
 
     // Action and Assert
@@ -15,8 +15,8 @@ describe('DeleteComment entities', () => {
     // Arrange
     const payload = {
       id: 123,
-      owner: true,
-      threadId: {},
+      threadId: true,
+      userId: {},
     };
 
     // Action and Assert
@@ -27,8 +27,8 @@ describe('DeleteComment entities', () => {
     // Arrange
     const payload = {
       id: 'comment-123',
-      owner: 'user-123',
       threadId: 'thread-123',
+      userId: 'user-123',
     };
 
     // Action
@@ -36,7 +36,7 @@ describe('DeleteComment entities', () => {
 
     // Assert
     expect(deleteComment.id).toEqual(payload.id);
-    expect(deleteComment.owner).toEqual(payload.owner);
     expect(deleteComment.threadId).toEqual(payload.threadId);
+    expect(deleteComment.userId).toEqual(payload.userId);
   });
 });

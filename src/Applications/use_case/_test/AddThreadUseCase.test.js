@@ -1,35 +1,47 @@
+const AddThread = require('../../../Domains/threads/entities/AddThread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+
 const AddThreadUseCase = require('../AddThreadUseCase');
 
 describe('AddThreadUseCase', () => {
   it('should orchestrating the add thread action correctly', async () => {
-    /**
-     * @TODO 3
-     * Lengkapi pengujian `AddThreadUseCase` agar dapat memastikan
-     * flow/logika yang dituliskan pada `AddThreadUseCase` benar!
-     *
-     * Tentunya, di sini Anda harus melakukan Test Double
-     * untuk memalsukan implmentasi fungsi `threadRepository`.
-     */
     // Arrange
-    const mockThreadRepository = {
-      addThread: jest.fn(() => Promise.resolve('thread-123')),
+    const useCasePayload = {
+      title: 'sebuah thread',
+      body: 'sebuah body thread',
+      owner: 'user-123',
     };
 
-    const addThreadUseCase = new AddThreadUseCase({
+    // Mocking
+    const mockAddedThread = new AddedThread({
+      id: 'thread-123',
+      title: useCasePayload.title,
+      owner: 'user-123',
+    });
+
+    const mockThreadRepository = new ThreadRepository();
+
+    mockThreadRepository.addThread = jest.fn()
+      .mockImplementation(() => Promise.resolve(mockAddedThread));
+
+    const getThreadUseCase = new AddThreadUseCase({
       threadRepository: mockThreadRepository,
     });
 
-    const useCasePayload = {
-      title: 'Thread Title',
-      body: 'Thread Body',
-      owner: 'user-456',
-    };
     // Action
-    const addedThreadid = await addThreadUseCase.execute(useCasePayload);
+    const addedThread = await getThreadUseCase.execute(useCasePayload);
 
     // Assert
-    expect(addedThreadid).toEqual('thread-123');
-    expect(mockThreadRepository.addThread).toHaveBeenCalledWith(useCasePayload);
+    expect(addedThread).toStrictEqual(new AddedThread({
+      id: 'thread-123',
+      title: useCasePayload.title,
+      owner: 'user-123',
+    }));
+    expect(mockThreadRepository.addThread).toBeCalledWith(new AddThread({
+      title: useCasePayload.title,
+      body: useCasePayload.body,
+      owner: useCasePayload.owner,
+    }));
   });
 });

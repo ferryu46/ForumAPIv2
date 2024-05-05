@@ -1,26 +1,24 @@
-/* eslint-disable camelcase */
 
 exports.up = (pgm) => {
   pgm.createTable('threads', {
     id: {
-      type: 'VARCHAR(50)',
+      type: 'VARCHAR',
       primaryKey: true,
     },
     title: {
-      type: 'TEXT',
+      type: 'VARCHAR',
       notNull: true,
     },
     body: {
       type: 'TEXT',
       notNull: true,
     },
-    owner: {
-      type: 'VARCHAR(50)',
+    date: {
+      type: 'VARCHAR',
       notNull: true,
     },
-    date: {
-      type: 'TEXT',
-      notNull: true,
+    owner: {
+      type: 'VARCHAR',
     },
   });
 

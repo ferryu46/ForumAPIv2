@@ -1,27 +1,26 @@
+const autoBind = require('auto-bind');
 const AddCommentUseCase = require('../../../../Applications/use_case/AddCommentUseCase');
 const DeleteCommentUseCase = require('../../../../Applications/use_case/DeleteCommentUseCase');
 
 class CommentsHandler {
   constructor(container) {
     this._container = container;
+
+    autoBind(this);
   }
 
   async postCommentHandler(request, h) {
-    const { id: owner } = request.auth.credentials;
-    const { content } = request.payload;
-    const { id: threadId } = request.params;
+    const payload = {
+      ...request.payload,
+      threadId: request.params.threadId,
+      userId: request.auth.credentials.id,
+    };
 
-    const useCase = this._container.getInstance(AddCommentUseCase.name);
-
-    const addedComment = await useCase.execute({
-      threadId,
-      content,
-      owner,
-    });
+    const addCommentUseCase = this._container.getInstance(AddCommentUseCase.name);
+    const addedComment = await addCommentUseCase.execute(payload);
 
     const response = h.response({
       status: 'success',
-      message: 'Komentar berhasil ditambahkan',
       data: {
         addedComment,
       },
@@ -31,23 +30,23 @@ class CommentsHandler {
     return response;
   }
 
-  async deleteCommentHandler(request) {
-    const { id: owner } = request.auth.credentials;
-    const { threadId, commentId: id } = request.params;
+  async deleteCommentByIdHandler(request, h) {
 
-    /**
-     * @TODO 9
-     * Eksekusi useCase DeleteCommentUseCase untuk menjalankan aksi **menghapus komentar**
-     *
-     * Untuk mendapatkan useCase, pastikan Anda memanfaatkan method `this._container.getInstance`
-     */
-    const useCase = this._container.getInstance(DeleteCommentUseCase.name);
-    await useCase.execute({ threadId, id, owner });
-
-    return {
-      status: 'success',
-      message: 'Komentar berhasil dihapus',
+    const { commentId: id, threadId } = request.params;
+    const payload = {
+      id,
+      threadId,
+      userId: request.auth.credentials.id,
     };
+
+    const deleteCommentUseCase = this._container.getInstance(DeleteCommentUseCase.name);
+    await deleteCommentUseCase.execute(payload);
+
+    const response = h.response({
+      status: 'success',
+    });
+    
+    return response;
   }
 }
 
