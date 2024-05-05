@@ -6,26 +6,6 @@ const routes = (handler) => ([
     method: 'POST',
     path: '/authentications',
     handler: handler.postAuthenticationHandler,
-    options: {
-      description: 'POST authentications',
-      notes: 'Create new authentication',
-      tags: ['api', 'authentications'],
-      validate: {
-        payload: Joi.object({
-          username: Joi.string(),
-          password: Joi.string(),
-        }).label('Post-Authentications-Payload'),
-      },
-      response: {
-        schema: Joi.object({
-          status: 'success',
-          data: {
-            accessToken: Joi.string(),
-            refreshToken: Joi.string(),
-          },
-        }).label('Post-Authentications-Response'),
-      },
-    },
   },
   {
     method: 'PUT',

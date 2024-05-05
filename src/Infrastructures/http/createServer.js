@@ -1,9 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
-const HapiSwagger = require('hapi-swagger');
-const Inert = require('@hapi/inert');
-const Vision = require('@hapi/vision');
 
 const ClientError = require('../../Commons/exceptions/ClientError');
 const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
@@ -31,16 +28,6 @@ const createServer = async (container) => {
   await server.register([
     {
       plugin: Jwt,
-    },
-    {
-      plugin: HapiSwagger,
-      options: swaggerOptions,
-    },
-    {
-      plugin: Inert,
-    },
-    {
-      plugin: Vision,
     },
   ]);
 
