@@ -17,11 +17,15 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^20.1.5",
+    "@hapi/inert": "^7.1.0",
     "@hapi/jwt": "^2.0.1",
+    "@hapi/vision": "^7.0.3",
     "auto-bind": "^4.0.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
+    "hapi-swagger": "^17.2.1",
     "instances-container": "^2.0.3",
+    "joi": "^17.13.1",
     "nanoid": "^3.1.23",
     "pg": "^8.6.0"
   },
@@ -35,4 +39,3 @@
     "nodemon": "^2.0.9"
   }
 }
-

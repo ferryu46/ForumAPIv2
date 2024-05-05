@@ -1,5 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const HapiSwagger = require('hapi-swagger');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
 
 const ClientError = require('../../Commons/exceptions/ClientError');
 const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
@@ -11,6 +15,13 @@ const comments = require('../../Interfaces/http/api/comments');
 const replies = require('../../Interfaces/http/api/replies');
 const likes = require('../../Interfaces/http/api/likes');
 
+const swaggerOptions = {
+  info: {
+    title: 'ForumAPIv2 Documentation',
+    version: '1.0.0',
+  },
+};
+
 const createServer = async (container) => {
   const server = Hapi.server({
     host: process.env.HOST,
@@ -20,6 +31,16 @@ const createServer = async (container) => {
   await server.register([
     {
       plugin: Jwt,
+    },
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions,
+    },
+    {
+      plugin: Inert,
+    },
+    {
+      plugin: Vision,
     },
   ]);
 
@@ -35,7 +56,7 @@ const createServer = async (container) => {
       isValid: true,
       credentials: {
         id: artifacts.decoded.payload.id,
-      }
+      },
     }),
   });
 
