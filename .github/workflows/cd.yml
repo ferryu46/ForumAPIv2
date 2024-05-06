@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: SSH and deploy app
-        uses: appleboy/ssh-action@v.0.1.4
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -19,8 +19,9 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/ForumAPIv2
+            ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
             git pull origin main
             npm install
             npm run migrate up
             npm run migrate:test up
-            pm2 restart forum-api2
+            pm2 restart forumapi-2
