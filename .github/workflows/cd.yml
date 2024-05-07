@@ -10,20 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Enable SSH connection
-        uses: fifsky/ssh-action@master
+      - name: SSH connection
+        uses: "actions/checkout@v4"
+
+      - name: SSH ke CE
+        uses: "google-github-actions/ssh-compute@v1"
         with:
+          instance_name: "api-backend-server"
+          zone: ${{ secrets.GCP_ZONE }}
+          ssh_private_key: ${{ secrets.SSH_KEY }}
           command: |
-            cd /tmp
-            ls -a
             cd ~/ForumAPIv2
             git pull origin main
             npm install
             npm run migrate up
             npm run migrate:test up
             pm2 restart forumapi-2
-          host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          args: "-tt -vvv"
