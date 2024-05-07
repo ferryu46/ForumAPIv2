@@ -10,20 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH and deploy app
+      - name: Enable SSH connection
         uses: fifsky/ssh-action@master
         with:
           command: |
             cd /tmp
             ls -a
-          host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          args: "-tt -vvv"
-          script: cd ~/ForumAPIv2
+            cd ~/ForumAPIv2
             git pull origin main
             npm install
             npm run migrate up
             npm run migrate:test up
             pm2 restart forumapi-2
+          host: ${{ secrets.SSH_HOST }}
+          user: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          args: "-tt -vvv"
