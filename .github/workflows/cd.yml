@@ -17,7 +17,7 @@ jobs:
             cd /tmp
             ls -a
           host: ${{ secrets.SSH_HOST }}
-          user: root
+          user: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           args: "-tt -vvv"
