@@ -19,7 +19,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/ForumAPIv2
-            ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
             git pull origin main
             npm install
             npm run migrate up
