@@ -1,16 +1,21 @@
-name: Continuous Deployment
-
 on:
   push:
     branches:
-      - main
+      - "main"
+
+name: "Connect to GCP VM via ssh and run commands"
+env:
+  ZONE: "asia-southeast2-c"
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  ssh:
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: "read"
+      id-token: "write"
 
     steps:
-      - name: SSH connection
+      - name: Checkout
         uses: "actions/checkout@v4"
 
       - name: Authenticate to GCP
@@ -18,7 +23,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      - name: SSH ke CE
+      - name: SSH to VM
         uses: "google-github-actions/ssh-compute@v1"
         with:
           instance_name: "api-backend-server"
