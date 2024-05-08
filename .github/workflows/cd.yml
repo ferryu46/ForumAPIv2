@@ -40,12 +40,12 @@ jobs:
           zone: ${{ secrets.GCP_ZONE }}
           ssh_private_key: ${{ secrets.SSH_KEY }}
           command: |
-            gcloud compute ssh api-backend-server --zone=asia-southeast2-c --tunnel-through-iap
             ls -a
             git clone https://github.com/ferryu46/ForumAPIv2.git 
             git pull origin main
             cd ~/ForumAPIv2
             npm install
+            npm install pm2 -g
             npm run migrate up
             npm run migrate:test up
             pm2 restart forumapi-2
