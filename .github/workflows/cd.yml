@@ -1,10 +1,12 @@
+name: "Connect to GCP VM via ssh and run commands"
+
 on:
   push:
     branches:
       - "main"
 
-name: "Connect to GCP VM via ssh and run commands"
 env:
+  project_id: "dicoding-backend-expert-422420"
   ZONE: "asia-southeast2-c"
 
 jobs:
@@ -18,21 +20,24 @@ jobs:
       - name: Checkout
         uses: "actions/checkout@v4"
 
-      - name: Authenticate to GCP
-        uses: "google-github-actions/auth@v2"
+      - name: Set Gcloud SDK
+        uses: "google-github-actions/setup-gcloud@master"
         with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          project_id: "dicoding-backend-expert-422420"
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          export_default_credentials: true
 
       - name: SSH to VM
-        uses: "google-github-actions/ssh-compute@v1"
+        uses: "google-github-actions/ssh-compute@main"
         with:
-          instance_name: "api-backend-server"
+          project_id: "dicoding-backend-expert-422420"
           zone: ${{ secrets.GCP_ZONE }}
-          ssh_private_key: ${{ secrets.SSH_KEY }}
-          command: |
+          instance_name: "api-backend-server"
+          run: |
+            gcloud compute ssh api-backend-server --zone=asia-southeast2-c --tunnel-through-iap
             ls -a
-            cd ForumAPIv2
             git pull origin main
+            cd ~/ForumAPIv2
             npm install
             npm run migrate up
             npm run migrate:test up
