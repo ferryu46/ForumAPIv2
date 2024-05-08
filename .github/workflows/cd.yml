@@ -20,6 +20,12 @@ jobs:
       - name: Checkout
         uses: "actions/checkout@v4"
 
+      - name: Auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          project_id: "dicoding-backend-expert-422420"
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
       - name: Set Gcloud SDK
         uses: "google-github-actions/setup-gcloud@main"
         with:
@@ -28,12 +34,12 @@ jobs:
           export_default_credentials: true
 
       - name: SSH to VM
-        uses: "google-github-actions/ssh-compute@main"
+        uses: "google-github-actions/ssh-compute@v1"
         with:
           project_id: "dicoding-backend-expert-422420"
           zone: ${{ secrets.GCP_ZONE }}
           instance_name: "api-backend-server"
-          run: |
+          command: |
             gcloud compute ssh api-backend-server --zone=asia-southeast2-c --tunnel-through-iap
             ls -a
             git pull origin main
