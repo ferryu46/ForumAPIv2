@@ -42,8 +42,6 @@ jobs:
 
       - id: "test"
         run: |
-          ls -a
-          git clone https://github.com/ferryu46/ForumAPIv2.git
           git pull origin main
           cd ~/ForumAPIv2
           npm install
