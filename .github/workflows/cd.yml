@@ -45,6 +45,4 @@ jobs:
           git pull origin main
           npm install
           npm install pm2 -g
-          npm run migrate up
-          npm run migrate:test up
           pm2 restart forumapi-2
