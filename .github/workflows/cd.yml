@@ -43,7 +43,6 @@ jobs:
       - id: "test"
         run: |
           git pull origin main
-          cd ~/ForumAPIv2
           npm install
           npm install pm2 -g
           npm run migrate up
