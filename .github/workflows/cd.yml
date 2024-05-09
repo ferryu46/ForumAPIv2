@@ -38,9 +38,9 @@ jobs:
           instance_name: "api-backend-server"
           zone: ${{ secrets.GCP_ZONE }}
           ssh_private_key: ${{ secrets.SSH_KEY }}
-          command: |
+          run: |
             ls -a
-            git clone https://github.com/ferryu46/ForumAPIv2.git 
+            git clone https://github.com/ferryu46/ForumAPIv2.git
             git pull origin main
             cd ~/ForumAPIv2
             npm install
