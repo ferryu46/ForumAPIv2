@@ -1,4 +1,4 @@
-name: "Connect to GCP VM via ssh and run commands"
+name: "Continuous Deployment"
 
 on:
   push:
