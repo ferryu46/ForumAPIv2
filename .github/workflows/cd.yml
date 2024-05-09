@@ -30,8 +30,7 @@ jobs:
         uses: "google-github-actions/setup-gcloud@v2"
         with:
           project_id: "dicoding-backend-expert-422420"
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-          export_default_credentials: true
+          version: ">= 363.0.0"
 
       - name: SSH to VM
         uses: "google-github-actions/ssh-compute@v0"
